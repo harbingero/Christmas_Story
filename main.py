@@ -4,8 +4,9 @@ import random
 from collections import Counter
 
 # writing is the toggleable variable to write the final project or not
-writing = False
+writing = True
 overwrite = True
+madlib = True
 deviate = 5
 story_file_name = "Twas_a_Christmas_Story.txt"
 homeDir = "C:\\Users\\jgask\\Documents\\Personal\\Christmas2023"
@@ -16,74 +17,439 @@ line_count = 0
 story_lines = []
 story_sum = 0
 story_collection = []
+rhyme_words = []
+rhyme_endings = []
+rhyme_dict = {'thee': [],
+              'night': ['bright', 'light', 'right', 'tight', 'tonight', 'sight', 'delight', 'goodnight'],
+              'creeping': ['steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'steeping': ['creeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'keeping': ['creeping', 'steeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'sleeping': ['creeping', 'steeping', 'keeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'stealing': ['creeping', 'steeping', 'keeping', 'sleeping', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'revealing': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'feeling': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'tide': ['wide', 'beside', 'bide', 'side', 'ride'],
+              'wide': ['tide', 'beside', 'bide', 'side', 'ride'],
+              'beside': ['tide', 'wide', 'bide', 'side', 'ride'],
+              'bide': ['tide', 'wide', 'beside', 'side', 'ride'],
+              'morning': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'sleet': ['feet', 'greet', 'street', 'sweet'],
+              'feet': ['sleet', 'greet', 'street', 'sweet'],
+              'greet': ['sleet', 'feet', 'street', 'sweet'],
+              'street': ['sleet', 'feet', 'greet', 'sweet'],
+              'gone': ['tone', 'done', 'stone', 'throne'],
+              'on': [],
+              'benison': ['season', 'reason'],
+              'anon': [],
+              'snow': ['now', 'know'],
+              'low': ['below', 'glow', 'slow', 'flow'],
+              'go': [],
+              'below': ['low', 'glow', 'slow', 'flow'],
+              'tell': ['nowell', 'befell', 'dwell', 'dell', 'well'],
+              'nowell': ['tell', 'befell', 'dwell', 'dell', 'well'],
+              'befell': ['tell', 'nowell', 'dwell', 'dell', 'well'],
+              'dwell': ['tell', 'nowell', 'befell', 'dell', 'well'],
+              'bells': ['halls', 'walls'],
+              'say': [],
+              'away': ['way'],
+              'here': ['evrywhere', 'there', 'atmosphere'],
+              'cheer': ['sneer', 'reindeer'],
+              'old': ['bold', 'gold', 'foretold'],
+              'bold': ['old', 'gold', 'foretold'],
+              'dong': ['song', 'dingdong', 'along', 'strong', 'long', 'wrong'],
+              'song': ['dong', 'dingdong', 'along', 'strong', 'long', 'wrong'],
+              'ring': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'caroling': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'hear': ['year', 'dear', 'ear', 'clear', 'near', 'appear'],
+              'evrywhere': ['here', 'there', 'atmosphere'],
+              'air': [],
+              'pound': ['sound', 'around', 'found', 'ground', 'bound'],
+              'sound': ['pound', 'around', 'found', 'ground', 'bound'],
+              'dale': ['tale'],
+              'tale': ['dale'],
+              'sing': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'merry': ['cherry'],
+              'christmas': [],
+              'send': ['end'],
+              'end': ['send'],
+              'tone': ['gone', 'done', 'stone', 'throne'],
+              'home': ['come'],
+              'dingdong': ['dong', 'song', 'along', 'strong', 'long', 'wrong'],
+              'bright': ['night', 'light', 'right', 'tight', 'tonight', 'sight', 'delight', 'goodnight'],
+              'glow': ['low', 'below', 'slow', 'flow'], 'light': ['night', 'bright', 'right', 'tight', 'tonight', 'sight', 'delight', 'goodnight'],
+              'steals': ['peals'],
+              'year': ['hear', 'dear', 'ear', 'clear', 'near', 'appear'],
+              'peals': ['steals'],
+              'day': [],
+              'play': ['lay'],
+              'sweet': ['sleet', 'feet', 'greet', 'street'],
+              'repeat': ['great'],
+              'men': [],
+              'come': ['home'],
+              'christendom': [],
+              'along': ['dong', 'song', 'dingdong', 'strong', 'long', 'wrong'],
+              'way': ['away'],
+              'chime': ['sublime', 'summertime', 'prime'],
+              'sublime': ['chime', 'summertime', 'prime'],
+              'mouth': ['south'],
+              'south': ['mouth'],
+              'drowned': ['turned', 'burned'],
+              'rent': ['continent', 'present', 'intent', 'went'],
+              'continent': ['rent', 'present', 'intent', 'went'],
+              'forlorn': ['born', 'morn'],
+              'born': ['forlorn', 'morn'],
+              'head': ['instead', 'thread', 'dread'],
+              'said': [],
+              'strong': ['dong', 'song', 'dingdong', 'along', 'long', 'wrong'],
+              'deep': ['sleep', 'asleep', 'sheep'],
+              'sleep': ['deep', 'asleep', 'sheep'],
+              'fail': ['prevail'],
+              'prevail': ['fail'],
+              'fine': ['wine', 'kine', 'divine'],
+              'chrysoprase': [],
+              'wine': ['fine', 'kine', 'divine'],
+              'north': ['earth', 'birth'],
+              'lambs': [],
+              'gold': ['old', 'bold', 'foretold'],
+              'east': ['feast', 'beast', 'least', 'breast'],
+              'white': [],
+              'high': ['sleigh'],
+              'wings': ['sings', 'brings', 'wrappings', 'trappings'],
+              'sings': ['wings', 'brings', 'wrappings', 'trappings'],
+              'door': [],
+              'in': [],
+              'them': ['bethlehem'],
+              'begin': [],
+              'sun': [],
+              'asleep': ['deep', 'sleep', 'sheep'],
+              'done': ['gone', 'tone', 'stone', 'throne'],
+              'holly': ['jolly', 'faithfully', 'belly', 'jelly'],
+              'la': [],
+              'jolly': ['holly', 'faithfully', 'belly', 'jelly'],
+              'apparel': [],
+              'carol': [],
+              'us': [],
+              'chorus': [],
+              'measure': ['treasure'],
+              'treasure': ['measure'],
+              'passes': ['lasses', 'houses', 'mouses'],
+              'lasses': ['passes', 'houses', 'mouses'],
+              'together': ['weather', 'other'],
+              'weather': ['together', 'other'],
+              'snowman': [],
+              'more': ['sore', 'before', 'store'],
+              'buddies': ['skies'],
+              'not': [],
+              'why': [],
+              'anna': [],
+              'bye': [],
+              'halls': ['bells', 'walls'],
+              'overdue': [],
+              'walls': ['bells', 'halls'],
+              'joan': [],
+              'lonely': [],
+              'rooms': [],
+              'by': [],
+              'elsa': [],
+              'there': ['here', 'evrywhere', 'atmosphere'],
+              'been': [],
+              'to': [],
+              'you': [],
+              'other': ['together', 'weather'],
+              'me': [],
+              'do': [],
+              'king': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'mild': ['child'],
+              'reconciled': ['sled', 'unfurled', 'rolled'],
+              'rise': ['noise', 'surprise'],
+              'skies': ['buddies'],
+              'proclaim': [],
+              'bethlehem': ['them'],
+              'adored': ['barred'],
+              'lord': [],
+              'womb': [],
+              'see': [],
+              'deity': [],
+              'emmanuel': [],
+              'peace': ['grace', 'face'],
+              'righteousness11': [],
+              'brings': ['wings', 'sings', 'wrappings', 'trappings'],
+              'die': [],
+              'earth': ['north', 'birth'],
+              'birth': ['north', 'earth'],
+              'lot': [],
+              'season': ['benison', 'reason'],
+              'reason': ['benison', 'season'],
+              'right': ['night', 'bright', 'light', 'tight', 'tonight', 'sight', 'delight', 'goodnight'],
+              'tight': ['night', 'bright', 'light', 'right', 'tonight', 'sight', 'delight', 'goodnight'],
+              'all': ['small', 'wall'],
+              'small': ['all', 'wall'],
+              'shoes': [],
+              'whos': [],
+              'frown': ['town', 'down'],
+              'town': ['frown', 'down'],
+              'beneath': ['wreath', 'breath', 'death'],
+              'wreath': ['beneath', 'breath', 'death'],
+              'sneer': ['cheer', 'reindeer'],
+              'drumming': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'coming': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'boys': ['toys'],
+              'toys': ['boys'],
+              'noise': ['rise', 'surprise'],
+              'feast': ['east', 'beast', 'least', 'breast'],
+              'beast': ['east', 'feast', 'least', 'breast'],
+              'least': ['east', 'feast', 'beast', 'breast'],
+              'ringing': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'singing': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'christmassing': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'thing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'thing': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'humming', 'wing', 'bring', 'fling', 'burying'],
+              'now': ['snow', 'know'],
+              'how': [],
+              'idea': [],
+              'throat': ['coat'],
+              'coat': ['throat'],
+              'trick': ['nick', 'slick', 'quick'],
+              'nick': ['trick', 'slick', 'quick'],
+              'around': ['pound', 'sound', 'found', 'ground', 'bound'],
+              'found': ['pound', 'sound', 'around', 'ground', 'bound'],
+              'instead': ['head', 'thread', 'dread'],
+              'thread': ['head', 'instead', 'dread'],
+              'sacks': [],
+              'max': [],
+              'down': ['frown', 'town'],
+              'care': ['square'],
+              'square': ['care'],
+              'hissed': [],
+              'fist': [],
+              'pinch': ['grinch'],
+              'grinch': ['pinch'],
+              'two': [],
+              'flue': [],
+              'row': ['grow'],
+              'unpleasant': ['verdant'],
+              'present': ['rent', 'continent', 'intent', 'went'],
+              'drums': ['plums'],
+              'plums': ['drums'],
+              'nimbly': [],
+              'chimney': [],
+              'flash': ['whohash', 'sash'],
+              'whohash': ['flash', 'sash'],
+              'glee': [],
+              'tree': [],
+              'shove': ['dove', 'prove', 'love'],
+              'dove': ['shove', 'prove', 'love'],
+              'who': [],
+              'daughter': ['water', 'clatter', 'matter'],
+              'water': ['daughter', 'clatter', 'matter'],
+              'slick': ['trick', 'nick', 'quick'],
+              'quick': ['trick', 'nick', 'slick'],
+              'lied': [],
+              'side': ['tide', 'wide', 'beside', 'bide', 'ride'],
+              'dear': ['hear', 'year', 'ear', 'clear', 'near', 'appear'],
+              'bed': ['abed'],
+              'cup': [],
+              'up': [],
+              'fire': ['wire'],
+              'liar': [],
+              'wire': ['fire'],
+              'house': ['mouse'],
+              'mouse': ['house'],
+              'houses': ['passes', 'lasses', 'mouses'],
+              'mouses': ['passes', 'lasses', 'houses'],
+              'abed': ['bed'],
+              'sled': ['reconciled', 'unfurled', 'rolled'],
+              'wrappings': ['wings', 'sings', 'brings', 'trappings'],
+              'trappings': ['wings', 'sings', 'brings', 'wrappings'],
+              'crumpit': [],
+              'it': [],
+              'humming': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'wing', 'bring', 'fling', 'burying'],
+              'boohoo': [],
+              'ear': ['hear', 'year', 'dear', 'clear', 'near', 'appear'],
+              'grow': ['row'],
+              'very': [],
+              'eyes': [],
+              'surprise': ['rise', 'noise'],
+              'came': ['same', 'name'],
+              'same': ['came', 'name'],
+              'so': [],
+              'tags': ['bags'],
+              'bags': ['tags'],
+              'sore': ['more', 'before', 'store'],
+              'before': ['more', 'sore', 'store'],
+              'store': ['more', 'sore', 'before'],
+              'clear': ['hear', 'year', 'dear', 'ear', 'near', 'appear'],
+              'lay': ['play'],
+              'unfurled': ['reconciled', 'sled', 'rolled'],
+              'floats': [],
+              'world': [],
+              'plains': [],
+              'wing': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'bring', 'fling', 'burying'],
+              'sounds': [],
+              'strife': [],
+              'long': ['dong', 'song', 'dingdong', 'along', 'strong', 'wrong'],
+              'rolled': ['reconciled', 'sled', 'unfurled'],
+              'wrong': ['dong', 'song', 'dingdong', 'along', 'strong', 'long'],
+              'bring': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'fling', 'burying'],
+              'load': ['road'],
+              'slow': ['low', 'below', 'glow', 'flow'],
+              'hours': [],
+              'road': ['load'],
+              'foretold': ['old', 'bold', 'gold'],
+              'years': [],
+              'fling': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'burying'],
+              'sleigh': ['high'],
+              'tonight': ['night', 'bright', 'light', 'right', 'tight', 'sight', 'delight', 'goodnight'],
+              'ride': ['tide', 'wide', 'beside', 'bide', 'side'], 'ago': [],
+              'lank': ['bank'],
+              'bank': ['lank'],
+              'upsot': [],
+              '1': [],
+              'room': [],
+              '2': [],
+              'reigns': [],
+              'employ': [],
+              'joy': [],
+              '3': [],
+              'ground': ['pound', 'sound', 'around', 'found', 'bound'],
+              'flow': ['low', 'below', 'glow', 'slow'],
+              '4': [],
+              'grace': ['peace', 'face'],
+              'prove': ['shove', 'dove', 'love'],
+              'righteousness': [],
+              'love': ['shove', 'dove', 'prove'],
+              'verdant': ['unpleasant'],
+              'summertime': ['chime', 'sublime', 'prime'],
+              'prime': ['chime', 'sublime', 'summertime'],
+              'branches': [],
+              'faithfully': ['holly', 'jolly', 'belly', 'jelly'],
+              'unchangingly': [],
+              'brightly': [],
+              'child': ['mild'],
+              'sight': ['night', 'bright', 'light', 'right', 'tight', 'tonight', 'delight', 'goodnight'],
+              'afar': ['far'],
+              'alleluia': [],
+              'face': ['peace', 'grace'],
+              'den': [],
+              'again': ['vain', 'plain'],
+              'hole': ['mole'],
+              'mole': ['hole'],
+              'wood': [],
+              'should': [],
+              'know': ['snow', 'now'],
+              'sheep': ['deep', 'sleep', 'asleep'],
+              'noel': [],
+              'israel': [],
+              'star': [],
+              'far': ['afar'],
+              'delight': ['night', 'bright', 'light', 'right', 'tight', 'tonight', 'sight', 'goodnight'],
+              'intent': ['rent', 'continent', 'present', 'went'],
+              'went': ['rent', 'continent', 'present', 'intent'],
+              'northwest': ['rest', 'west'],
+              'rest': ['northwest', 'west'],
+              'stay': [],
+              'baltasar': [],
+              'they': [],
+              'sky': [],
+              'atmosphere': ['here', 'evrywhere', 'there'],
+              'near': ['hear', 'year', 'dear', 'ear', 'clear', 'appear'],
+              'prophecy': [],
+              'saddlebows': ['rows', 'furbelows'],
+              'keys': [],
+              'rows': ['saddlebows', 'furbelows'],
+              'furbelows': ['saddlebows', 'rows'],
+              'almondtrees': [],
+              'west': ['northwest', 'rest'],
+              'dell': ['tell', 'nowell', 'befell', 'dwell', 'well'],
+              'breast': ['east', 'feast', 'beast', 'least'],
+              'well': ['tell', 'nowell', 'befell', 'dwell', 'dell'],
+              'news': ['jews'],
+              'jews': ['news'],
+              'vain': ['again', 'plain'],
+              'great': ['repeat'],
+              'insane': [],
+              'plain': ['again', 'vain'],
+              'wait': [],
+              'jerusalem': [],
+              'still': ['will', 'hill'],
+              'morn': ['forlorn', 'born'],
+              'will': ['still', 'hill'],
+              'hill': ['still', 'will'],
+              'guard': ['innyard'],
+              'turned': ['drowned', 'burned'],
+              'innyard': ['guard'],
+              'barred': ['adored'],
+              'burned': ['drowned', 'turned'],
+              'hay': [],
+              'kine': ['fine', 'wine', 'divine'],
+              'divine': ['fine', 'wine', 'kine'],
+              'nazareth': ['teeth'],
+              'breath': ['beneath', 'wreath', 'death'],
+              'death': ['beneath', 'wreath', 'breath'],
+              'paraclete': [],
+              'burying': ['creeping', 'steeping', 'keeping', 'sleeping', 'stealing', 'revealing', 'feeling', 'morning', 'ring', 'caroling', 'sing', 'king', 'drumming', 'coming', 'ringing', 'singing', 'christmassing', 'thing', 'humming', 'wing', 'bring', 'fling'],
+              'stone': ['gone', 'tone', 'done', 'throne'],
+              'comforted': [],
+              'throne': ['gone', 'tone', 'done', 'stone'],
+              'gate': ['hate'],
+              'array': [],
+              'hate': ['gate'],
+              'beds': [],
+              'heads': [],
+              'cap': [],
+              'nap': [],
+              'clatter': ['daughter', 'water', 'matter'],
+              'matter': ['daughter', 'water', 'clatter'],
+              'sash': ['flash', 'whohash'],
+              'appear': ['hear', 'year', 'dear', 'ear', 'clear', 'near'],
+              'reindeer': ['cheer', 'sneer'],
+              'name': ['came', 'same'],
+              'vixen': [],
+              'blitzen': [],
+              'wall': ['all', 'small'],
+              'fly': [],
+              'flew': [],
+              'too': [],
+              'roof': ['hoof'],
+              'hoof': ['roof'],
+              'bound': ['pound', 'sound', 'around', 'found', 'ground'],
+              'foot': ['soot'],
+              'soot': ['foot'],
+              'back': ['pack'],
+              'pack': ['back'],
+              'cherry': ['merry'],
+              'bow': [],
+              'teeth': ['nazareth'],
+              'belly': ['holly', 'jolly', 'faithfully', 'jelly'],
+              'jelly': ['holly', 'jolly', 'faithfully', 'belly'],
+              'elf': ['myself'],
+              'myself': ['elf'],
+              'dread': ['head', 'instead', 'thread'],
+              'work': [],
+              'jerk': [],
+              'nose': ['rose'],
+              'rose': ['nose'],
+              'whistle': ['thistle'],
+              'thistle': ['whistle'],
+              'goodnight': ['night', 'bright', 'light', 'right', 'tight', 'tonight', 'sight', 'delight']}
 final_story_location = os.path.join(os.getcwd(), story_file_name)
 neglected_lines = []
 final_story_length = 0
 number_list = []
 word_sum = 0
-
-for i in range(0, 1000):
-    number_list.append(i)
-
-for story in stories:
-    story_line_count = 0
-    file = os.path.join(homeDir, story)
-    with open(file, "r", encoding="utf8") as f:
-        for line in f:
-            if len(line.rstrip()) > 0:
-                line_count += 1
-                story_line_count += 1
-                story_collection.append(line.rstrip())
-    story_lines.append(story_line_count)
-for count in story_lines:
-    story_sum += count
-story_average = story_sum // len(story_lines)
-deviation = story_average // deviate
-final_deviation = random.randint(0 - deviation, deviation)
-project_lines = story_average - final_deviation
-
-if final_story_location and overwrite:
-    with open(final_story_location, "w") as f:
-        pass
-
-with open(final_story_location, "r") as f:
-    for line in f:
-        final_story_length += 1
-
-
-def random_line(total_lines):
-    line_number = random.randint(0, total_lines - 1)
-    return line_number
-
-
-# Writes the story if the variable at the top is True
-if writing:
-    while final_story_length < project_lines:
-        append_line_number = random_line(line_count)
-        if append_line_number not in neglected_lines:
-            neglected_lines.append(append_line_number)
-            final_story_length += 1
-            with open(final_story_location, "a", encoding="utf8") as f:
-                f.write(story_collection[append_line_number].lstrip() + "\n")
-
-word_list = []
-for line in story_collection:
-    appendable_word = ""
-    for letter in line.lstrip():
-        if letter == " ":
-            word_list.append(appendable_word)
-            appendable_word = ""
-        else:
-            if letter not in punctuation:
-                appendable_word += letter.lower()
-    word_list.append(appendable_word)
-
-top_n = 100
-Counter = Counter(word_list)
+adverb = ["around",
+          "out"]
 verb = ["sing",
         "repeat",
+        "come",
         "born",
+        "hear",
+        "know",
+        "go",
+        "be",
+        "open",
         "hail",
+        "jingle",
+        "let",
         "see",
         "wanna",
         "say",
@@ -92,11 +458,41 @@ verb = ["sing",
         "stand",
         "tell",
         "bring",
-        "stop"]
+        "stop",
+        "ride"]
+past_tense_verb = ["heard",
+                   "went",
+                   "were",
+                   "thought",
+                   "started",
+                   "took",
+                   "said",
+                   "did",
+                   "got",
+                   "saw",
+                   "came"]
 noun = ["tree",
+        "child",
+        "feast",
+        "noise",
+        "day",
+        "gold",
+        "goodwill",
+        "heart",
+        "heart",
         "glory",
+        "world",
+        "peace",
+        "chimney",
         "king",
+        "joy",
+        "star",
+        "heaven",
         "snowman",
+        "song",
+        "head",
+        "light",
+        "sleigh",
         "noun",
         "man",
         "newborn",
@@ -111,35 +507,139 @@ noun = ["tree",
         "air",
         "home",
         "year",
-        "wonders",
         "verse",
         "thing"]
+plural_nouns = ["men",
+                "toys",
+                "people",
+                "wonders",
+                "bells",
+                "angels",
+                "bags",
+                "shepherds",
+                "hours",
+                "kings",
+                "stockings"]
+proper_nouns = ["christmas",
+                "christ",
+                "earth",
+                "grinch",
+                "whoville",
+                "israel",
+                "bethlehem",
+                "god",
+                "claus",
+                "jesus"]
 pronouns = ["his",
+            "thee",
             "i",
+            "them",
+            "him",
+            "her",
             "their",
             "he",
             "they",
             "we",
             "me",
-            "you"]
-plural_nouns = ["men",
-                "toys",
-                "bags",
-                "hours",
-                "stockings"]
-proper_nouns = ["christmas",
-                "grinch",
-                "israel",
-                "bethlehem",
-                "claus",
-                "jesus"]
-adjuctives = ["silent",
+            "you",
+            "us"]
+bad_words = ["the",
+             "and",
+             "that",
+             "for",
+             "o",
+             "away",
+             "down",
+             "from",
+             "as",
+             "but",
+             "when",
+             "not",
+             "are",
+             "like",
+             "snow",
+             "when",
+             "not",
+             "by",
+             "through",
+             "so",
+             "who",
+             "how",
+             "this",
+             "of",
+             "a",
+             "to",
+             "in",
+             "la",
+             "all",
+             "with",
+             "up",
+             "now",
+             "its",
+             "now",
+             "on",
+             "is",
+             "it",
+             "was",
+             "then"]
+adjectives = ["silent",
+              "merry",
               "heavenly",
+              "bright",
+              "sweet",
+              "holy",
+              "little",
+              "joyful",
+              "great",
+              "wise",
               "quick",
+              "old",
+              "small",
               "tight"]
 ignorable_word = ["the",
                   "right",
+                  "while",
+                  "far",
+                  "down",
+                  "way",
+                  "now",
+                  "away",
+                  "cheer",
+                  "whos",
+                  "why",
+                  "would",
+                  "theyd",
+                  "like",
+                  "what",
+                  "here",
+                  "who",
+                  "how",
+                  "my",
+                  "there",
+                  "more",
+                  "at",
+                  "have",
+                  "where",
+                  "still",
+                  "good",
+                  "will",
+                  "sound",
+                  "every",
+                  "some",
+                  "morning",
+                  "one",
+                  "two",
+                  "without",
+                  "three",
+                  'four',
+                  "hark",
+                  "only",
+                  "our",
+                  "before",
                   "could",
+                  "do",
+                  "oer",
+                  "do",
                   "each",
                   "round",
                   "other",
@@ -372,7 +872,6 @@ ignorable_word = ["the",
                   "pleased",
                   "emmanuel",
                   "heavenborn",
-                  "righteousness11",
                   "risen",
                   "healing",
                   "lays",
@@ -1246,20 +1745,187 @@ ignorable_word = ["the",
                   "nose",
                   "st",
                   "onehorse"]
-top_n = top_n + len(ignorable_word) + len(pronouns)
-most_occur = Counter.most_common(top_n)
-for set_of_count in most_occur:
-    n = set_of_count[0]
-    if n not in ignorable_word and\
-            n not in pronouns and\
-            n not in proper_nouns and\
-            n not in verb and\
-            n not in noun and\
-            n not in plural_nouns and\
-            n not in adjuctives:
-        print(set_of_count)
-        word_sum += 1
-print(word_sum)
+
+
+def random_line(total_lines):
+    return random.randint(0, total_lines - 1)
+
+
+def madlib_noun(word):
+    changed = False
+    madlibbed = word
+    if word.lower() in noun:
+        madlibbed = noun[random.randint(0, len(noun) - 1)]
+    if re.sub(r"\W", "", word.lower()) != madlibbed:
+        # print("True {}, {}".format(word, madlibbed))
+        word = madlibbed
+        changed = random.randint(0, 3)  # Weights changed to 75% chance to madlib the noun.
+    return changed, word
+
+
+def madlib_verb(word):
+    changed = False
+    madlibbed = word
+    if word.lower() in verb:
+        madlibbed = verb[random.randint(0, len(verb) - 1)]
+    if re.sub(r"\W", "", word.lower()) != madlibbed:
+        # print("True {}, {}".format(word, madlibbed))
+        word = madlibbed
+        changed = random.randint(0, 3)  # Weights changed to 75% chance to madlib the noun.
+    return changed, word
+
+
+def madlib_plural_noun(word):
+    changed = False
+    madlibbed = word
+    if word.lower() in verb:
+        madlibbed = verb[random.randint(0, len(verb) - 1)]
+    if re.sub(r"\W", "", word.lower()) != madlibbed:
+        # print("True {}, {}".format(word, madlibbed))
+        word = madlibbed
+        changed = random.randint(0, 3)  # Weights changed to 75% chance to madlib the noun.
+    return changed, word
+
+
+def madlib_adjective(word):
+    changed = False
+    madlibbed = word
+    if word.lower() in adjectives:
+        madlibbed = adjectives[random.randint(0, len(adjectives) - 1)]
+    if re.sub(r"\W", "", word.lower()) != madlibbed:
+        # print("True {}, {}".format(word, madlibbed))
+        word = madlibbed
+        changed = random.randint(0, 3)  # Weights changed to 75% chance to madlib the noun.
+    return changed, word
+
+
+def madlibing(words_list):
+    new_list = []
+    for word in words_list:
+        changed, new_word = madlib_noun(re.sub(r"\W", "", word))
+        if not changed:
+            changed, new_word = madlib_verb(re.sub(r"\W", "", word))
+        if not changed:
+            changed, new_word = madlib_plural_noun(re.sub(r"\W", "", word))
+        if not changed:
+            changed, new_word = madlib_adjective(re.sub(r"\W", "", word))
+        if word[-1] in punctuation:
+            new_word += word[-1]
+        if re.search(r'[A-Z]', word[0]):
+            new_word = new_word.capitalize()
+        if changed:
+            new_list.append(new_word)
+        else:
+            new_list.append(word)
+    return " ".join(new_list)
+
+
+def rhyme(word):
+    for word_in_dict in rhyme_dict:
+        if word.lower() != word_in_dict:
+            if word[-3:] == word_in_dict[-3:]:
+                rhyme_dict[word_in_dict].append(word.lower())
+    print(rhyme_dict[word_in_dict])
+
+for i in range(0, 1000):
+    number_list.append(i)
+
+for story in stories:
+    story_line_count = 0
+    file = os.path.join(homeDir, story)
+    with open(file, "r", encoding="utf8") as f:
+        for line in f:
+            if len(re.sub(r"(0-9)", "", line).rstrip()) > 2:
+                print(len(re.sub(r"(0-9)", "", line).rstrip()))
+                appendable = re.sub(r"\W", "", line.split()[-1])
+                if appendable not in rhyme_words:
+                    rhyme_words.append(appendable)
+                if appendable[-3:] not in rhyme_endings:
+                    rhyme_endings.append(appendable[-3:])
+                if appendable not in rhyme_dict:
+                    rhyme_dict[appendable.lower()] = []
+                line_count += 1
+                story_line_count += 1
+                story_collection.append(line.rstrip())
+    story_lines.append(story_line_count)
+for key in rhyme_dict:
+    if len(key) > 1:
+        rhyme(key)
+for count in story_lines:
+    story_sum += count
+story_average = story_sum // len(story_lines)
+deviation = story_average // deviate
+final_deviation = random.randint(0 - deviation, deviation)
+project_lines = story_average - final_deviation
+
+print(rhyme_words)
+print(len(rhyme_words))
+print(rhyme_endings)
+print(len(rhyme_endings))
+print(rhyme_dict)
+
+if final_story_location and overwrite:
+    with open(final_story_location, "w") as f:
+        pass
+
+with open(final_story_location, "r") as f:
+    for line in f:
+        final_story_length += 1
+
+# Writes the story if the variable at the top is True
+if writing:
+    while final_story_length < project_lines:
+        # I need to create a new function to approve the append_line_number
+        append_line_number = random_line(line_count)
+        # print(append_line_number)
+        if append_line_number not in neglected_lines:
+            neglected_lines.append(append_line_number)
+            mad_lib_line = story_collection[append_line_number].lstrip().split()
+            if madlib:
+                mad_lib_line = madlibing(mad_lib_line) # This variable needs to be incorporated in the write function below.  I haven't implemented this yet, and this block of code needs refacoring.
+            final_story_length += 1
+            with open(final_story_location, "a", encoding="utf8") as f:
+                f.write(mad_lib_line + "\n")
+
+# The code below is used to determine what type of words are
+# word_list = []
+# for line in story_collection:
+#     appendable_word = ""
+#     for letter in line.lstrip():
+#         if letter == " ":
+#             word_list.append(appendable_word)
+#             appendable_word = ""
+#         else:
+#             if letter not in punctuation:
+#                 appendable_word += letter.lower()
+#     word_list.append(appendable_word)
+#
+# top_n = 100
+# Counter = Counter(word_list)
+# top_n = top_n +\
+#         len(bad_words) +\
+#         len(pronouns) +\
+#         len(adverb) +\
+#         len(verb) +\
+#         len(past_tense_verb) +\
+#         len(noun) +\
+#         len(plural_nouns) +\
+#         len(adjectives)
+# most_occur = Counter.most_common(top_n)
+# for set_of_count in most_occur:
+#     n = set_of_count[0]
+#     if n not in bad_words and\
+#             n not in pronouns and\
+#             n not in proper_nouns and\
+#             n not in verb and\
+#             n not in noun and\
+#             n not in plural_nouns and\
+#             n not in adjectives and\
+#             n not in past_tense_verb and\
+#             n not in adverb:
+#         print(set_of_count)
+#         word_sum += 1
+# print(word_sum)
 
 # I am attempting to create a list of characters that are just punctuation
 # for story in stories:
@@ -1271,3 +1937,32 @@ print(word_sum)
 #                     if letter not in punctuation:
 #                         punctuation.append(letter)
 # print(punctuation)
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - Dictionary testing to be used above.
+# >>> print(thing.split()[-1])
+# words.
+# >>> print(thing.split()[-1][:-3])
+# wor
+# >>> print(thing.split()[-1][-3:])
+# ds.
+# >>> this_dict = {1: "1", 2: "2", 3: "3"}
+# >>> if 1 in this_dict:
+# ...     print("Yes")
+# ...
+# Yes
+# >>> if 4 in this_dict:
+# ...     print("No")
+# ...
+# >>> this_dict = {1: ["1", "one"], 2: ["2", "two"], 3: ["3", "three"]}
+# >>> this_dict
+# {1: ['1', 'one'], 2: ['2', 'two'], 3: ['3', 'three']}
+# >>> this_dict[1].append("ein")
+# >>> this_dict
+# {1: ['1', 'one', 'ein'], 2: ['2', 'two'], 3: ['3', 'three']}
+# >>> for key in this_dict:
+# ...     print(this_dict[key])
+# ...
+# ['1', 'one', 'ein']
+# ['2', 'two']
+# ['3', 'three']
